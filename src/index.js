@@ -3,21 +3,25 @@ import _ from 'lodash';
 import path from 'node:path';
 
 const genDiff = (path1, path2) => {
-  const object1 = JSON.parse(readFileSync(path.resolve(path1)));
-  const object2 = JSON.parse(readFileSync(path.resolve(path2)));
-  const uniqKeys = _.sortBy(_.uniq([...Object.keys(object1), ...Object.keys(object2)]));
+  const obj1 = JSON.parse(readFileSync(path.resolve(path1)));
+  const obj2 = JSON.parse(readFileSync(path.resolve(path2)));
+
+  const uniqKeys = _.sortBy(
+    _.uniq([...Object.keys(obj1), ...Object.keys(obj2)]),
+  );
   const diff = uniqKeys.map((key) => {
-    const property1 = `${key}: ${object1[key]}`;
-    const property2 = `${key}: ${object2[key]}`;
-    if (Object.hasOwn(object1, key) && Object.hasOwn(object2, key)) {
-      return object1[key] === object2[key] ? `\n    ${property1}` : `\n  - ${property1}\n  + ${property2}`;
-    } if (Object.hasOwn(object1, key)) {
-      return `\n  - ${property1}`;
+    const value1 = obj1[key];
+    const value2 = obj2[key];
+
+    if (key in obj1 && key in obj2) {
+      return value1 === value2
+        ? `\n    ${key}: ${value1}`
+        : `\n  - ${key}: ${value1}\n  + ${key}: ${value2}`;
     }
-    return `\n  + ${property2}`;
+    return key in obj1 ? `\n  - ${key}: ${value1}` : `\n  + ${key}: ${value2}`;
   });
 
-  return `\n{${diff}\n}`;
+  return `\n{${diff.join('')}\n}`;
 };
 
 export default genDiff;
