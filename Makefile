@@ -7,5 +7,8 @@ lint:
 fix:
 	npx eslint --fix .
 
-test-coverage:
+test:
 	npx jest
+
+test-coverage:
+	npm test -- --coverage --coverageProvider=v8
