@@ -22,3 +22,6 @@ jobs:
 
       - name: Run test
         run: make test
+
+        env:
+          CODECLIMATE_REPO_TOKEN: ${{ secrets.CODECLIMATE_REPO_TOKEN }}
