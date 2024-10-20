@@ -7,5 +7,5 @@ lint:
 fix:
 	npx eslint --fix .
 
-test:
+test-coverage:
 	npx jest
