@@ -33,6 +33,7 @@
     "trailingComma": "all"
   },
   "devDependencies": {
-    "globals": "^15.11.0"
+    "globals": "^15.11.0",
+    "jest": "^29.7.0"
   }
 }
