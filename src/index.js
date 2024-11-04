@@ -1,10 +1,14 @@
-import { readFileSync } from 'node:fs';
 import _ from 'lodash';
+import { readFileSync } from 'node:fs';
 import path from 'node:path';
+import parsers from './parsers.js';
 
-function parseFile(filePath) {
-  return JSON.parse(readFileSync(path.resolve(filePath)));
-}
+const getJsonFormatFile = (filePath) => {
+  const extension = path.extname(filePath).slice(1);
+  const parser = parsers[extension];
+  const data = readFileSync(filePath);
+  return parser(data);
+};
 
 const getDiffLine = (key, value1, value2) => {
   if (value1 === value2) {
@@ -24,8 +28,8 @@ const getKeyDiff = (key, obj1, obj2) => {
 };
 
 const genDiff = (path1, path2) => {
-  const obj1 = parseFile(path1);
-  const obj2 = parseFile(path2);
+  const obj1 = getJsonFormatFile(path1);
+  const obj2 = getJsonFormatFile(path2);
 
   const uniqKeys = _.sortBy(
     _.uniq([...Object.keys(obj1), ...Object.keys(obj2)]),
